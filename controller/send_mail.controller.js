@@ -39,7 +39,7 @@ module.exports = {
 
         var message = {
             from: 'Ifest.app.help <Ifest.app.help@gmail.com>',
-            to: "seifeddineelbehi@gmail.com",
+            to: "info.atast@gmail.com",
             subject: req.body.emailType,
             html: body,
 
