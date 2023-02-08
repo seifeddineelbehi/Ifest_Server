@@ -18,9 +18,14 @@ const eventsSchema = mongoose.Schema(
       type: String,
       default: "Event Date",
     },
-    eventTime: {
+    eventStartTime: {
       type: String,
-      default: "Event Date",
+      default: "Event Start time",
+    },
+    eventEndTime: {
+      type: String,
+      default: "Event End time",
+
     },
     eventAbout: {
       type: String,

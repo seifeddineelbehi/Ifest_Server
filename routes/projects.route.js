@@ -6,6 +6,6 @@ const projectController = require("../controller/projects.controller");
  * @Path /projects
  */
 
-router.post("/addProject/", projectController.addSchedule);
+router.post("/addProject/", projectController.addProject);
 
 module.exports = router;

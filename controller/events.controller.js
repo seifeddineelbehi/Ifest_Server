@@ -13,25 +13,23 @@ module.exports = {
       planing,
     } = req.body;
     console.log(planing);
-    planing.array.forEach(element => {
+
+    const event = new Events({
+      ...req.body,
+    });
+    planing.array.forEach(async element => {
       const eventPlaning = new EventPlaning({
         element,
       });
       await eventPlaning.save();
+      event.planing.push(eventPlaning);
     });
-
-    
-    // 
-    // const event = new Events({
-    //   ...req.body,
-    //   planing: eventPlaning,
-    // });
-    // await event.save();
-    // res.status(200).send({
-    //   success: true,
-    //   message: "Event added successfully!",
-    //   eventDetails: event,
-    // });
+    await event.save();
+    res.status(200).send({
+      success: true,
+      message: "Event added successfully!",
+      eventDetails: event,
+    });
   },
 
   getAllEvents: async (req, res) => {

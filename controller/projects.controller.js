@@ -1,12 +1,12 @@
-const { Schedule } = require("../models/schedule.model");
+const { Project } = require("../models/projects.model");
 
 module.exports = {
-  addSchedule: async (req, res) => {
+  addProject: async (req, res) => {
     console.log(req.body);
-    const schedule = new Schedule({
+    const project = new Project({
       ...req.body,
     });
-    await schedule.save();
-    res.status(200).json(schedule);
+    await project.save();
+    res.status(200).json(project);
   },
 };

@@ -18,4 +18,5 @@ router.get(
   userController.getClientDetails
 );
 router.post("/updateProfile/", userController.updateProfile);
+
 module.exports = router;

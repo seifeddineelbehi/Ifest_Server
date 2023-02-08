@@ -13,7 +13,6 @@ opts.secretOrKey = process.env.ACCESS_TOKEN_SECRET;
 passport.use(
   new JwtStrategy(opts, async function (jwt_payload, done) {
     User.findById(jwt_payload.id, function (err, user) {
-      console.log(jwt_payload.id);
       if (err) {
         return done(err, false);
       }
@@ -30,22 +29,5 @@ passport.use(
         });
       }
     });
-    // .populate("conducteurs")
-    // .populate("briseGlace")
-    // .populate("vols")
-    // .populate("incendies")
-    // .populate({
-    //   path: "constatsAccidents",
-    //   populate: [
-    //     {
-    //       path: "VehiculeA",
-    //       model: "Vehicule",
-    //     },
-    //     {
-    //       path: "VehiculeB",
-    //       model: "Vehicule",
-    //     },
-    //   ],
-    // });
   })
 );

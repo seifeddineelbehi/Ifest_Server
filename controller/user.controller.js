@@ -5,6 +5,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 module.exports = {
+  
   signUpUser: async (req, res) => {
     const {
       email,

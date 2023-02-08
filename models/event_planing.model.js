@@ -2,7 +2,11 @@ const mongoose = require("mongoose");
 
 const eventPlaningSchema = mongoose.Schema(
   {
-    time: {
+    startTime: {
+      type: String,
+      default: "Time",
+    },
+    endTime: {
       type: String,
       default: "Time",
     },
