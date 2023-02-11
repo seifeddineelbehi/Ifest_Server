@@ -3,6 +3,7 @@ const { route } = require("express/lib/application");
 const userController = require("../controller/user.controller");
 require("../config/passeport");
 const passport = require("passport");
+
 /**
  * @Path /user
  */
@@ -17,6 +18,10 @@ router.get(
   passport.authenticate("jwt", { session: false }),
   userController.getClientDetails
 );
-router.post("/updateProfile/", userController.updateProfile);
+router.post("/updateProfile/", passport.authenticate('jwt', { session: false }), userController.updateProfile);
+
+//add event to bookmark
+router.post("/addEventToBookmark/", passport.authenticate('jwt', { session: false }), userController.addEventToBookmark);
+router.post("/removeEventFromBookmark/", passport.authenticate('jwt', { session: false }), userController.removeEventFromBookmark);
 
 module.exports = router;

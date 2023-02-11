@@ -38,6 +38,10 @@ const eventsSchema = mongoose.Schema(
         default: [],
       },
     ],
+    image: {
+        type: String,
+        default: "image",
+    },
   },
   {
     timestamps: { createdAt: true, updatedAt: true },

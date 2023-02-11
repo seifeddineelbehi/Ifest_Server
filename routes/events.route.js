@@ -1,12 +1,52 @@
 const router = require("express").Router();
 const { route } = require("express/lib/application");
 const eventController = require("../controller/events.controller");
+require('../config/passeport')
+const passport = require('passport');
 
 /**
  * @Path /events
  */
 
-router.post("/addEvent/", eventController.addEvent);
-router.get("/getAllEvents/", eventController.getAllEvents);
+const multer = require("multer");
+const fs = require("fs");
+
+
+//upload image to server
+var storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        //get the event id from headers
+        const eventId = req.headers.idevent;
+
+        //Directory path
+        const dir = `./uploads/Events/Event-${eventId}/images`;
+        
+        //check if directory exist
+        fs.exists(dir, (exist) => {
+            if (!exist) {
+                return fs.mkdir(dir, (error) => cb(error, dir));
+            }
+            return cb(null, dir);
+        });
+    },
+
+    //change filename to remove special caracters
+    filename: function (req, file, cb) {
+        const newFileName = file.originalname.replace(/[`~!@#$%^&*()_|+\-=?;:'",<>\{\}\[\]\\\/]/gi, '_')
+        cb(null, newFileName);
+    },
+
+});
+
+const upload = multer({ storage });
+
+// Create Event :
+//1st Step : add event 
+router.post("/addEvent/", passport.authenticate('jwt', { session: false }), eventController.addEvent);
+
+//2nd step : upload event images
+router.route("/uploadImages").post(upload.single('file'), eventController.uploadImages);
+
+router.get("/getAllEvents/", passport.authenticate('jwt', { session: false }), eventController.getAllEvents);
 
 module.exports = router;

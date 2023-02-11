@@ -13,6 +13,7 @@ var mailRouter = require("./routes/send_mail.route");
 var eventsRouter = require("./routes/events.route");
 var projectsRouter = require("./routes/projects.route");
 var administratorsRouter = require("./routes/administrators.route");
+var generalPlaningRouter = require("./routes/general_planing.route");
 var cron = require("node-cron");
 
 var app = express();
@@ -28,7 +29,9 @@ app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "uploads")));
+app.use("/uploads", express.static("./uploads"));
+
 
 app.use("/user", usersRouter);
 app.use("/schedule", scheduleRouter);
@@ -36,6 +39,7 @@ app.use("/sendMail", mailRouter);
 app.use("/events", eventsRouter);
 app.use("/projects", projectsRouter);
 app.use("/admin", administratorsRouter);
+app.use("/generalPlaning", generalPlaningRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
