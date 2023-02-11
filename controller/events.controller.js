@@ -72,13 +72,17 @@ module.exports = {
       const event = new Events({
         ...req.body,
       });
-      planing.array.forEach(async element => {
+
+      var listPlanning = [];
+      planing.forEach(async element => {
         const eventPlaning = new EventPlaning({
           element,
         });
         await eventPlaning.save();
-        event.planing.push(eventPlaning);
+        listPlanning.push(eventPlaning);
       });
+
+      event.planing.push(...listPlanning);
       await event.save();
       SetupEventFolder(event._id);
       res.status(200).send({
