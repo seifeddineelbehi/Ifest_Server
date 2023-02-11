@@ -8,7 +8,7 @@ module.exports = {
         const dateString = req.body.date;
         const date = new Date(dateString);
         try {
-            if (req.admin.username != null) {
+            if (req.user.username != null) {
                 const general = new GeneralPlanning({ date: date });
 
                 var listPlanning = [];

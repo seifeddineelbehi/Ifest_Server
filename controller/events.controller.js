@@ -68,7 +68,7 @@ module.exports = {
     } = req.body;
     console.log(planing);
 
-    if (req.admin.username != null){
+    if (req.user.username != null){
       const event = new Events({
         ...req.body,
       });
