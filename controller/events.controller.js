@@ -23,10 +23,6 @@ module.exports = {
 
   uploadImages: async (req, res) => {
     const eventId = req.headers.idevent;
-
-
-
-
     try {
 
         console.log("uploaded");
