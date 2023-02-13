@@ -3,14 +3,23 @@ const mongoose = require("mongoose");
 const generalPlaningSchema = mongoose.Schema(
   {
     date: {
-      type: String,
+      type: Date,
       default: "Date",
     },
     planing: [
         {
-          type: mongoose.Types.ObjectId,
-          ref: "EventPlaning",
-          default: [],
+          startTime: {
+            type: String,
+            default: "startTime",
+          },
+          endTime: {
+            type: String,
+            default: "endTime",
+          },
+          description: {
+            type: String,
+            default: "Description",
+          },
         },
       ],
   },
