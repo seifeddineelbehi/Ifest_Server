@@ -1,5 +1,5 @@
-const { GeneralPlanning } = require("../models/general_planning.model");
-const { EventPlaning } = require("../models/event_planing.model");
+const  GeneralPlanning  = require("../models/general_planning.model");
+const  EventPlaning  = require("../models/event_planing.model");
 const moment = require('moment');
 module.exports = {
 
@@ -12,13 +12,16 @@ module.exports = {
                 const general = new GeneralPlanning({ date: date });
 
                 var listPlanning = [];
-                planing.forEach(async element => {
-                    const eventPlaning = new EventPlaning({
-                        element,
-                    });
+                for (let index = 0; index < planing.length; index++) {
+
+                    const element = planing[index];
+
+                    const eventPlaning = new EventPlaning({ ...element });
+
                     await eventPlaning.save();
+
                     listPlanning.push(eventPlaning);
-                });
+                }
 
                 general.planing.push(...listPlanning);
                 await general.save();

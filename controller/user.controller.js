@@ -1,12 +1,11 @@
 require("dotenv").config();
-const { Events } = require("../models/events.model");
 const { User } = require("../models/user.model");
 const { Project } = require("../models/projects.model");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 module.exports = {
-
+  
   signUpUser: async (req, res) => {
     const {
       email,
@@ -86,65 +85,6 @@ module.exports = {
       });
     }
   },
-
-  addEventToBookmark: async (req, res) => {
-    const idUser = req.user._id;
-    const idEvent = req.header.idevent;
-
-    try {
-
-      var user = await User.findById(idUser).populate('bookmarkedEvents');
-
-      var event = await Event.findById(idEvent);
-
-      user.bookmarkedEvents.push(event);
-
-      await user.save();
-
-
-      res.status(201).send({
-        success: true,
-        message: "Event bookmarked",
-        user: user
-      });
-    } catch (error) {
-      res.status(500).send({
-        success: false,
-        message: error
-      });
-    }
-
-  },
-
-  removeEventFromBookmark: async (req, res) => {
-    const idUser = req.user._id;
-    const idEvent = req.header.idevent;
-
-    try {
-      var user = await User.findById(idUser).populate('bookmarkedEvents');
-
-      var event = await Event.findById(idEvent);
-
-      const index = user.bookmarkedEvents.indexOf(event);
-      user.bookmarkedEvents.splice(index, 1);
-
-      await user.save();
-
-
-      res.status(201).send({
-        success: true,
-        message: "Event removed from bookmark",
-        user: user
-      });
-    } catch (error) {
-      res.status(500).send({
-        success: false,
-        message: error
-      });
-    }
-
-  },
-
 
   updateProfile: async (req, res) => {
     console.log(req.body.firstName);

@@ -22,4 +22,4 @@ const eventPlaningSchema = mongoose.Schema(
 
 const EventPlaning = mongoose.model("EventPlaning", eventPlaningSchema);
 
-module.exports = { EventPlaning };
+module.exports =  EventPlaning ;

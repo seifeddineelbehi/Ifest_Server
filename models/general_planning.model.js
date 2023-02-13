@@ -21,4 +21,4 @@ const generalPlaningSchema = mongoose.Schema(
 
 const GeneralPlaning = mongoose.model("GeneralPlaning", generalPlaningSchema);
 
-module.exports = { GeneralPlaning };
+module.exports =  GeneralPlaning ;
