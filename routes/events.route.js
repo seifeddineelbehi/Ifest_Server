@@ -19,12 +19,16 @@ var storage = multer.diskStorage({
         const eventId = req.headers.idevent;
 
         //Directory path
-        const dir = `./uploads/Events/Event-${eventId}/images`;
+        const dir = `./uploads/Events/Event-${eventId}/`;
         
         //check if directory exist
         fs.exists(dir, (exist) => {
+            
+
             if (!exist) {
+                console.log(dir);
                 return fs.mkdir(dir, (error) => cb(error, dir));
+                
             }
             return cb(null, dir);
         });
