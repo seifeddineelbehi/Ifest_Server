@@ -20,4 +20,8 @@ router.get(
 );
 router.post("/updateProfile/", passport.authenticate('jwt', { session: false }), userController.updateProfile);
 
+//add event to bookmark
+router.post("/addEventToBookmark/", passport.authenticate('jwt', { session: false }), userController.addEventToBookmark);
+router.post("/removeEventFromBookmark/", passport.authenticate('jwt', { session: false }), userController.removeEventFromBookmark);
+
 module.exports = router;

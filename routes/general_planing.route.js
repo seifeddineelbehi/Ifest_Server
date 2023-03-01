@@ -12,6 +12,6 @@ router.post("/addGeneralPlaning/", passport.authenticate('jwt', { session: false
 
 router.get("/getGeneralPlaningByWeek/", passport.authenticate('jwt', { session: false }), generalPlaningController.getGeneralPlanningByWeek);
 
-router.get("/getAllGeneralPlaning/", passport.authenticate('jwt', { session: false }), generalPlaningController.getAllGeneralPlanning);
+router.get("/getAllGeneralPlaning/", generalPlaningController.getAllGeneralPlanning);
 
 module.exports = router;

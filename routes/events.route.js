@@ -47,6 +47,6 @@ router.post("/addEvent/", passport.authenticate('jwt', { session: false }), even
 //2nd step : upload event images
 router.route("/uploadImages").post(upload.single('file'), eventController.uploadImages);
 
-router.get("/getAllEvents/", passport.authenticate('jwt', { session: false }), eventController.getAllEvents);
+router.get("/getAllEvents/", eventController.getAllEvents);
 
 module.exports = router;
