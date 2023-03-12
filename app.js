@@ -14,6 +14,8 @@ var eventsRouter = require("./routes/events.route");
 var projectsRouter = require("./routes/projects.route");
 var administratorsRouter = require("./routes/administrators.route");
 var generalPlaningRouter = require("./routes/general_planing.route");
+const pushNotif = require("./routes/PushNotification");
+
 var cron = require("node-cron");
 
 var app = express();
@@ -40,6 +42,7 @@ app.use("/events", eventsRouter);
 app.use("/projects", projectsRouter);
 app.use("/admin", administratorsRouter);
 app.use("/generalPlaning", generalPlaningRouter);
+app.use("/pushNotif", pushNotif);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

@@ -15,6 +15,7 @@ module.exports = {
       projectId,
       role,
       phoneNumber,
+      deviceId,
     } = req.body;
     const isUserFound = await User.findOne({ email: email });
 
@@ -43,7 +44,7 @@ module.exports = {
   },
 
   signInUser: async (req, res) => {
-    const { email, password } = req.body;
+    const { email, password,deviceId } = req.body;
     try {
       const user = await User.findOne({ email: email });
       if (!user) {
@@ -61,7 +62,8 @@ module.exports = {
 
         const token = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET);
         console.log("aaaaaaaaaaaaaaaa");
-
+        user.deviceId = deviceId;
+        await user.save();
         // return res.status(200).json(user);
         return res.status(200).send({
           success: true,

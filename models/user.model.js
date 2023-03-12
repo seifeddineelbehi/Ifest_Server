@@ -22,6 +22,10 @@ const userSchema = mongoose.Schema(
       type: String,
       default: "projectId",
     },
+    deviceId: {
+      type: String,
+      default: "deviceId",
+    },
     role: {
       type: String,
       default: "role",

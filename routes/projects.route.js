@@ -8,5 +8,6 @@ const passport = require('passport');
  */
 
 router.post("/addProject/", passport.authenticate('jwt', { session: false }), projectController.addProject);
+router.post("/bulkAddProject/", passport.authenticate('jwt', { session: false }), projectController.bulkAddProject);
 
 module.exports = router;

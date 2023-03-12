@@ -68,6 +68,7 @@ module.exports = {
       eventPrice,
       eventDate,
       eventTime,
+      image,
       eventAbout,
       planing,
     } = req.body;
@@ -83,6 +84,7 @@ module.exports = {
         eventDate,
         eventTime,
         eventAbout,
+        image,
       });
       event.eventDate=date;
       var listPlanning = [];
