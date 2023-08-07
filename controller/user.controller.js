@@ -64,6 +64,7 @@ module.exports = {
         console.log("aaaaaaaaaaaaaaaa");
         user.deviceId = deviceId;
         await user.save();
+        console.log("bbbbbbbbbbbbbb");
         // return res.status(200).json(user);
         return res.status(200).send({
           success: true,
