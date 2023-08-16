@@ -1,6 +1,8 @@
 const Events  = require("../models/events.model");
+const Users  = require("../models/user.model");
 const EventPlaning = require("../models/event_planing.model");
 const fs = require("fs");
+const e = require("express");
 
 
 async function SetupEventFolder(id) {
@@ -71,6 +73,8 @@ module.exports = {
       image,
       eventAbout,
       planing,
+      latitude,
+      longitude
     } = req.body;
     const dateString = eventDate;
 
@@ -85,6 +89,8 @@ module.exports = {
         eventTime,
         eventAbout,
         image,
+        latitude,
+        longitude
       });
       event.eventDate=date;
       var listPlanning = [];
@@ -133,5 +139,109 @@ module.exports = {
       success: true,
       list: events,
     });
+  },
+
+  likeEvent :async (req,res) =>{
+    const idUser = req.user._id;
+    const idevent = req.params.idevent
+    var indexLikes = -1 ;
+    var indexUnLikes = -1 ;
+    if (idUser){
+      try{
+        const user = req.user
+        const event =  await Events.findById(idevent).populate([
+          {
+            path: "likes",
+            model: "User",
+          },
+          {
+            path: "unlikes",
+            model: "User",
+          },
+        ]);
+        event.unlikes.forEach(element => {
+       
+          if (element._id.equals(user._id)){
+            indexUnLikes = event.unlikes.indexOf(element);
+            event.unlikes.splice(indexUnLikes,1);
+            
+          }
+        });
+        event.likes.forEach(element => {
+       
+          if (element._id.equals(user._id)){
+            indexLikes = event.likes.indexOf(element);
+            
+          }
+        });
+
+        if (indexLikes == -1){
+          event.likes.push(user);
+        }
+        const newevent = await event.save();
+        res.status(200).send({
+          success: true,
+          message: "Event liked",
+          event: newevent
+        });
+      }catch (error){
+        res.status(403).send({
+          success: false,
+          message: error,
+        });
+    } 
+    }
+  },
+
+  unslikeEvent :async (req,res) =>{
+    const idUser = req.user._id;
+    const idevent = req.params.idevent
+    var indexLikes = -1 ;
+    var indexUnLikes = -1 ;
+    if (idUser){
+      try{
+        const user = req.user;
+        const event =  await Events.findById(idevent).populate([
+          {
+            path: "likes",
+            model: "User",
+          },
+          {
+            path: "unlikes",
+            model: "User",
+          },
+        ]);
+ 
+        event.likes.forEach(element => {
+       
+          if (element._id.equals(user._id)){
+            indexLikes = event.likes.indexOf(element);
+            event.likes.splice(indexLikes,1);
+            
+          }
+        });
+        event.unlikes.forEach(element => {
+       
+          if (element._id.equals(user._id)){
+            indexUnLikes = event.unlikes.indexOf(element);
+            
+          }
+        });
+        if (indexUnLikes == -1){
+          event.unlikes.push(user);
+        }
+        const newevent=await event.save();
+        res.status(200).send({
+          success: true,
+          message: "Event unliked",
+          event: newevent
+        });
+      }catch (error){
+        res.status(403).send({
+          success: false,
+          message:error,
+        });
+    } 
+    }
   },
 };

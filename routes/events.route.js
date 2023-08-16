@@ -53,4 +53,10 @@ router.route("/uploadImages").post(upload.single('file'), eventController.upload
 
 router.get("/getAllEvents/", eventController.getAllEvents);
 
+//likeEvent 
+router.put('/likeEvent/:idevent/',passport.authenticate('jwt',{session:false}),eventController.likeEvent );
+
+//dislikeEvent
+router.put('/unlikeEvent/:idevent/',passport.authenticate('jwt',{session:false}),eventController.unslikeEvent );
+
 module.exports = router;

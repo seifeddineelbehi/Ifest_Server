@@ -90,10 +90,9 @@ module.exports = {
   },
 
   updateProfile: async (req, res) => {
-    console.log(req.body.firstName);
-    console.log(req.body.id);
-    const user = await User.findOneAndUpdate(
-      { _id: req.body.id },
+
+    var user = await User.findOneAndUpdate(
+      { _id: req.user.id },
       {
         $set: {
           firstName: req.body.firstName,
@@ -105,7 +104,8 @@ module.exports = {
         },
       }
     );
-    res.status(200).send(user);
+    const newUser =  await User.findById(user.id);
+    res.status(200).send(newUser);
   },
 
   addEventToBookmark: async (req, res) => {

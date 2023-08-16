@@ -32,7 +32,7 @@ const userSchema = mongoose.Schema(
     },
     phoneNumber: {
       type: Number,
-      default: 00000000,
+      default: '00000000',
     },
     bookmarkedEvents: [
       {
