@@ -90,22 +90,40 @@ module.exports = {
   },
 
   updateProfile: async (req, res) => {
-
-    var user = await User.findOneAndUpdate(
-      { _id: req.user.id },
-      {
-        $set: {
-          firstName: req.body.firstName,
-          lastName: req.body.lastName,
-          email: req.body.email,
-          birthDate: req.body.birthDate,
-          address: req.body.address,
-          phoneNumber: req.body.phoneNumber,
-        },
-      }
-    );
-    const newUser =  await User.findById(user.id);
+    console.log(req.body)
+    if (req.body.password == ""){
+      var user = await User.findOneAndUpdate(
+        { _id: req.user.id },
+        {
+          $set: {
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            email: req.body.email,
+            phoneNumber: req.body.phoneNumber,
+          },
+        }
+      );
+      const newUser =  await User.findById(user.id);
     res.status(200).send(newUser);
+    }else {
+      const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(req.body.password, salt);
+      var user = await User.findOneAndUpdate(
+        { _id: req.user.id },
+        {
+          $set: {
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            email: req.body.email,
+            phoneNumber: req.body.phoneNumber,
+            password: hashedPassword,
+          },
+        }
+      );
+      const newUser =  await User.findById(user.id);
+    res.status(200).send(newUser);
+    }
+    
   },
 
   addEventToBookmark: async (req, res) => {

@@ -59,4 +59,7 @@ router.put('/likeEvent/:idevent/',passport.authenticate('jwt',{session:false}),e
 //dislikeEvent
 router.put('/unlikeEvent/:idevent/',passport.authenticate('jwt',{session:false}),eventController.unslikeEvent );
 
+//updateEvent
+router.put('/updateEvent',passport.authenticate('jwt',{session:false}),eventController.updateEvent );
+
 module.exports = router;

@@ -150,6 +150,7 @@ module.exports = {
       try{
         const user = req.user
         const event =  await Events.findById(idevent).populate([
+          
           {
             path: "likes",
             model: "User",
@@ -177,8 +178,16 @@ module.exports = {
 
         if (indexLikes == -1){
           event.likes.push(user);
+        }else{
+          event.likes.splice(indexLikes,1);
         }
-        const newevent = await event.save();
+         await event.save();
+         const newevent =  await Events.findById(idevent).populate([
+          {
+            path: "planing",
+            model: "EventPlaning",
+          },
+        ])
         res.status(200).send({
           success: true,
           message: "Event liked",
@@ -229,8 +238,16 @@ module.exports = {
         });
         if (indexUnLikes == -1){
           event.unlikes.push(user);
+        }else{
+          event.unlikes.splice(indexUnLikes,1);
         }
-        const newevent=await event.save();
+        await event.save();
+         const newevent =  await Events.findById(idevent).populate([
+          {
+            path: "planing",
+            model: "EventPlaning",
+          },
+        ])
         res.status(200).send({
           success: true,
           message: "Event unliked",
@@ -244,4 +261,61 @@ module.exports = {
     } 
     }
   },
+
+  updateEvent: async (req, res) => {
+    const {
+      _id,
+      eventName,
+      eventLocation,
+      eventPrice,
+      eventDate,
+      eventTime,
+      image,
+      eventAbout,
+      planing,
+      latitude,
+      longitude
+    } = req.body;
+    const dateString = eventDate;
+
+    let date = parseDate(dateString);
+    var event = await Events.findById(_id).populate('planing')
+
+    event.eventName = eventName,
+    event.eventLocation = eventLocation,
+    event.eventPrice = eventPrice,
+    event.eventDate = date,
+    event.eventTime = eventTime,
+    event.eventAbout = eventAbout,
+    event.image = image,
+    event.latitude = latitude,
+    event.longitude = longitude
+    
+    for (let index = 0; index < planing.length; index++) {
+
+      const element = planing[index];
+
+      const eventPlaning = await EventPlaning.findById(element._id);
+      if(eventPlaning ){
+        eventPlaning.startTime = element.startTime;
+        eventPlaning.endTime = element.endTime;
+        eventPlaning.description = element.description;
+      await eventPlaning.save();
+
+    }
+  }
+  try{
+    const updatedEvent = await event.save();
+    res.status(200).send({
+      success: true,
+      message: "Event updated" ,
+      event: updatedEvent
+    });
+  }catch (error){
+    res.status(403).send({
+      success: false,
+      message:error,
+    });
+  }
+},
 };
