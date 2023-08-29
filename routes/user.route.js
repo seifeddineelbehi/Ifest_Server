@@ -24,4 +24,10 @@ router.post("/updateProfile/", passport.authenticate('jwt', { session: false }),
 router.post("/addEventToBookmark/", passport.authenticate('jwt', { session: false }), userController.addEventToBookmark);
 router.post("/removeEventFromBookmark/", passport.authenticate('jwt', { session: false }), userController.removeEventFromBookmark);
 
+//check user exist
+router.get("/userExist/", userController.UserExistByEmail);
+
+//changePassword
+router.put("/updatePassword/", userController.updatePassword);
+
 module.exports = router;

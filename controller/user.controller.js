@@ -5,7 +5,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 module.exports = {
-  
+
   signUpUser: async (req, res) => {
     const {
       email,
@@ -44,7 +44,7 @@ module.exports = {
   },
 
   signInUser: async (req, res) => {
-    const { email, password,deviceId } = req.body;
+    const { email, password, deviceId } = req.body;
     try {
       const user = await User.findOne({ email: email });
       if (!user) {
@@ -88,44 +88,85 @@ module.exports = {
       });
     }
   },
-
-  updateProfile: async (req, res) => {
-    console.log(req.body)
-    if (req.body.password == ""){
-      var user = await User.findOneAndUpdate(
-        { _id: req.user.id },
-        {
-          $set: {
-            firstName: req.body.firstName,
-            lastName: req.body.lastName,
-            email: req.body.email,
-            phoneNumber: req.body.phoneNumber,
-          },
-        }
-      );
-      const newUser =  await User.findById(user.id);
-    res.status(200).send(newUser);
-    }else {
-      const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(req.body.password, salt);
-      var user = await User.findOneAndUpdate(
-        { _id: req.user.id },
-        {
-          $set: {
-            firstName: req.body.firstName,
-            lastName: req.body.lastName,
-            email: req.body.email,
-            phoneNumber: req.body.phoneNumber,
-            password: hashedPassword,
-          },
-        }
-      );
-      const newUser =  await User.findById(user.id);
-    res.status(200).send(newUser);
-    }
-    
+  UserExistByEmail: async (req, res) => {
+    const { email } = req.headers;
+    try {
+      const result = await User.findOne({ email: email });
+      if (!result) {
+        return res
+          .status(404)
+          .json({ success: false, message: "User does not Exist" });
+      } else {
+        console.log('eeeeeeeee');
+        return res
+          .status(200)
+          .json({ success: true, message: 'User exist' });
+      }
+    } catch (error) {
+      console.log(`Error ${error}`); return res
+        .status(503)
+        .json({ created: false, message: error })
+    };
   },
 
+
+updateProfile: async (req, res) => {
+  console.log(req.body)
+  if (req.body.password == "") {
+    var user = await User.findOneAndUpdate(
+      { _id: req.user.id },
+      {
+        $set: {
+          firstName: req.body.firstName,
+          lastName: req.body.lastName,
+          email: req.body.email,
+          phoneNumber: req.body.phoneNumber,
+        },
+      }
+    );
+    const newUser = await User.findById(user.id);
+    res.status(200).send(newUser);
+  } else {
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(req.body.password, salt);
+    var user = await User.findOneAndUpdate(
+      { _id: req.user.id },
+      {
+        $set: {
+          firstName: req.body.firstName,
+          lastName: req.body.lastName,
+          email: req.body.email,
+          phoneNumber: req.body.phoneNumber,
+          password: hashedPassword,
+        },
+      }
+    );
+    const newUser = await User.findById(user.id);
+    res.status(200).send(newUser);
+  }
+
+},
+updatePassword : async (req,res)=>{
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(req.body.password, salt);
+  try {
+    var user = await User.findOneAndUpdate(
+      { email: req.body.email },
+      {
+        $set: {
+          password: hashedPassword,
+        },
+      }
+    );
+    return res
+          .status(200)
+          .json({ success: true, message: 'Password updated' });
+  } catch (error) {
+    console.log(`Error ${error}`); return res
+        .status(503)
+        .json({ created: false, message: error })
+    };
+  },
   addEventToBookmark: async (req, res) => {
     const idUser = req.user._id;
     const idEvent = req.header.idevent;
@@ -155,32 +196,32 @@ module.exports = {
 
   },
 
-  removeEventFromBookmark: async (req, res) => {
-    const idUser = req.user._id;
-    const idEvent = req.header.idevent;
+    removeEventFromBookmark: async (req, res) => {
+      const idUser = req.user._id;
+      const idEvent = req.header.idevent;
 
-    try {
-      var user = await User.findById(idUser).populate('bookmarkedEvents');
+      try {
+        var user = await User.findById(idUser).populate('bookmarkedEvents');
 
-      var event = await Event.findById(idEvent);
+        var event = await Event.findById(idEvent);
 
-      const index = user.bookmarkedEvents.indexOf(event);
-      user.bookmarkedEvents.splice(index, 1);
+        const index = user.bookmarkedEvents.indexOf(event);
+        user.bookmarkedEvents.splice(index, 1);
 
-      await user.save();
+        await user.save();
 
 
-      res.status(201).send({
-        success: true,
-        message: "Event removed from bookmark",
-        user: user
-      });
-    } catch (error) {
-      res.status(500).send({
-        success: false,
-        message: error
-      });
-    }
+        res.status(201).send({
+          success: true,
+          message: "Event removed from bookmark",
+          user: user
+        });
+      } catch (error) {
+        res.status(500).send({
+          success: false,
+          message: error
+        });
+      }
 
-  },
+    },
 };
